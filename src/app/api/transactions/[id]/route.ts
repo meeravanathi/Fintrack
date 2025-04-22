@@ -1,16 +1,23 @@
+// src/app/api/transactions/[id]/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
 const TransactionSchema = z.object({
-  amount: z.number(),
+  amount: z.coerce.number().positive(),
   description: z.string(),
   date: z.string().transform((str) => new Date(str)),
 });
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+type ParamsPromise = { params: Promise<{ id: string }> };
+
+export async function GET(
+  req: Request,
+  { params }: ParamsPromise
+) {
+  const { id } = await params;                     // ← await the promise to get `{ id }`
   const transaction = await prisma.transaction.findUnique({
-    where: { id: params.id },
+    where: { id },
   });
 
   if (!transaction) {
@@ -20,7 +27,11 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
   return NextResponse.json(transaction);
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(
+  req: Request,
+  { params }: ParamsPromise
+) {
+  const { id } = await params;
   const body = await req.json();
   const parsed = TransactionSchema.safeParse(body);
 
@@ -29,14 +40,18 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   }
 
   const updated = await prisma.transaction.update({
-    where: { id: params.id },
+    where: { id },
     data: parsed.data,
   });
 
   return NextResponse.json(updated);
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
-  await prisma.transaction.delete({ where: { id: params.id } });
+export async function DELETE(
+  req: Request,
+  { params }: ParamsPromise
+) {
+  const { id } = await params;
+  await prisma.transaction.delete({ where: { id } });
   return NextResponse.json({ message: "Deleted" });
 }
