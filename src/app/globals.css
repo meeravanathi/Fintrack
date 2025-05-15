@@ -112,14 +112,29 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-  
-      font-family: 'Roboto', sans-serif;
-    
-    @apply bg-background text-foreground;
-  }
+body {
+  background-color: #000000;
+  color: #f6f6f6;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: #82AAFF;
+  text-decoration: underline;
+}
+
+button {
+  background-color: #82AAFF;
+  color: #121212;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #5179e4;
 }

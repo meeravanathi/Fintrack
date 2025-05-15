@@ -44,22 +44,20 @@ export default function TransactionForm() {
 
   const [categories, setCategories] = useState<Category[]>([]);
 
-
   useEffect(() => {
-  const fetchCategories = async () => {
-    const res = await fetch("/api/categories");
-    if (!res.ok) {
-      console.error("Failed to fetch categories:", await res.text());
-      return;
-    }
-    const data = await res.json();
-    setCategories(data);
-    console.log("Categories from API:", data);
-  };
+    const fetchCategories = async () => {
+      const res = await fetch("/api/categories");
+      if (!res.ok) {
+        console.error("Failed to fetch categories:", await res.text());
+        return;
+      }
+      const data = await res.json();
+      setCategories(data);
+      console.log("Categories from API:", data);
+    };
 
-  fetchCategories();
-}, []);
-
+    fetchCategories();
+  }, []);
 
   const onSubmit = async (data: TransactionInput) => {
     await fetch("/api/transactions", {
@@ -71,17 +69,21 @@ export default function TransactionForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 font-bold">
         <FormField
           control={form.control}
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Amount</FormLabel>
+              <FormLabel className="font-bold text-white">Amount</FormLabel>
               <FormControl>
-                <Input type="number" {...field} />
+                <Input
+                  type="number"
+                  {...field}
+                  className="font-bold rounded-md border border-gray-600 bg-gray-900 px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="font-bold text-red-400" />
             </FormItem>
           )}
         />
@@ -90,11 +92,14 @@ export default function TransactionForm() {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel className="font-bold text-white">Description</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input
+                  {...field}
+                  className="font-bold rounded-md border border-gray-600 bg-gray-900 px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="font-bold text-red-400" />
             </FormItem>
           )}
         />
@@ -103,11 +108,15 @@ export default function TransactionForm() {
           name="date"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Date</FormLabel>
+              <FormLabel className="font-bold text-white">Date</FormLabel>
               <FormControl>
-                <Input type="date" {...field} />
+                <Input
+                  type="date"
+                  {...field}
+                  className="font-bold rounded-md border border-gray-600 bg-gray-900 px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="font-bold text-red-400" />
             </FormItem>
           )}
         />
@@ -116,29 +125,28 @@ export default function TransactionForm() {
           name="categoryId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormLabel className="font-bold text-white">Category</FormLabel>
               <FormControl>
-              <Select value={field.value} onValueChange={field.onChange}>
-  <SelectTrigger>
-    <SelectValue placeholder="Select a category">
-      {categories.find(cat => cat.id === field.value)?.name}
-    </SelectValue>
-  </SelectTrigger>
-  <SelectContent>
-    {categories.map(cat => (
-      <SelectItem key={cat.id} value={cat.id}>
-        {cat.name}
-      </SelectItem>
-    ))}
-  </SelectContent>
-</Select>
-
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="font-bold rounded-md border border-gray-600 bg-gray-900 px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition">
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent className="font-bold bg-gray-800 text-white">
+                    {categories.map(cat => (
+                      <SelectItem key={cat.id} value={cat.id} className="font-bold">
+                        {cat.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
-              <FormMessage />
+              <FormMessage className="font-bold text-red-400" />
             </FormItem>
           )}
         />
-        <Button type="submit">Add Transaction</Button>
+        <Button type="submit" className="font-bold bg-purple-700 hover:bg-purple-800">
+          Add Transaction
+        </Button>
       </form>
     </Form>
   );

@@ -76,7 +76,7 @@ export default function CategoryPieChart() {
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
-        <Tooltip formatter={(value) => `$${Number(value).toFixed(2)}`} />
+        <Tooltip formatter={(value) => `Rs.${Number(value).toFixed(2)}`} />
         <Legend />
       </PieChart>
     </ResponsiveContainer>

@@ -36,9 +36,9 @@ export default function SummaryCards() {
   const total = transactions.reduce((sum, t) => sum + t.amount, 0);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="p-4 shadow-md rounded-xl bg-purple-100">
-        <h2 className="text-lg font-semibold">Total Expenses</h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
+      <div className="p-4 shadow-xl bg-gray-900 rounded-xl ">
+        <h2 className="text-lg font-bold ">Total Expenses</h2>
         {loading ? (
           <p className="text-xl">Loading...</p>
         ) : (

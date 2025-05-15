@@ -19,23 +19,32 @@ export default function TransactionList() {
   }, []);
 
   return (
-    <table className="w-full border-collapse mt-4">
-      <thead>
-        <tr className="bg-gray-200">
-          <th className="p-2">Date</th>
-          <th className="p-2">Description</th>
-          <th className="p-2">Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        {transactions.map((tx) => (
-          <tr key={tx.id} className="border-t">
-            <td className="p-2">{new Date(tx.date).toLocaleDateString()}</td>
-            <td className="p-2">{tx.description}</td>
-            <td className="p-2">₹{tx.amount.toFixed(2)}</td>
+    <div className="overflow-x-auto mt-6">
+      <table className="min-w-full border-collapse bg-gray-900 text-gray-200 rounded-lg shadow-lg">
+        <thead>
+          <tr className="bg-gray-800 border-b border-gray-700">
+            <th className="py-3 px-6 text-left uppercase font-semibold tracking-wide">Date</th>
+            <th className="py-3 px-6 text-left uppercase font-semibold tracking-wide">Description</th>
+            <th className="py-3 px-6 text-right uppercase font-semibold tracking-wide">Amount (₹)</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {transactions.map((tx, i) => (
+            <tr
+              key={tx.id}
+              className={`border-b border-gray-700 ${
+                i % 2 === 0 ? "bg-gray-800" : "bg-gray-900"
+              } hover:bg-gray-700 transition-colors duration-300`}
+            >
+              <td className="py-3 px-6">{new Date(tx.date).toLocaleDateString()}</td>
+              <td className="py-3 px-6">{tx.description}</td>
+              <td className="py-3 px-6 text-right font-medium text-green-400">
+                ₹{tx.amount.toFixed(2)}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
