@@ -1,13 +1,26 @@
-import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
 
 export async function GET() {
-  const categories = await prisma.category.findMany();
-  return NextResponse.json(categories);
-}
+  try {
+    const categories = await prisma.category.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    });
 
-export async function POST(req: Request) {
-  const body = await req.json();
-  const category = await prisma.category.create({ data: body });
-  return NextResponse.json(category);
+    // Map _id to id if needed (Prisma does it automatically usually)
+    const mappedCategories = categories.map(({ id, name }) => ({
+      id,
+      name,
+    }));
+
+    return NextResponse.json(mappedCategories);
+  } catch (error) {
+    console.error("Failed to fetch categories:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch categories" },
+      { status: 500 }
+    );
+  }
 }

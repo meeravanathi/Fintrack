@@ -44,15 +44,22 @@ export default function TransactionForm() {
 
   const [categories, setCategories] = useState<Category[]>([]);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const res = await fetch("/api/categories");
-      const data = await res.json();
-      setCategories(data);
-    };
 
-    fetchCategories();
-  }, []);
+  useEffect(() => {
+  const fetchCategories = async () => {
+    const res = await fetch("/api/categories");
+    if (!res.ok) {
+      console.error("Failed to fetch categories:", await res.text());
+      return;
+    }
+    const data = await res.json();
+    setCategories(data);
+    console.log("Categories from API:", data);
+  };
+
+  fetchCategories();
+}, []);
+
 
   const onSubmit = async (data: TransactionInput) => {
     await fetch("/api/transactions", {
@@ -111,18 +118,21 @@ export default function TransactionForm() {
             <FormItem>
               <FormLabel>Category</FormLabel>
               <FormControl>
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((cat) => (
-                      <SelectItem key={cat.id} value={cat.id}>
-                        {cat.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <Select value={field.value} onValueChange={field.onChange}>
+  <SelectTrigger>
+    <SelectValue placeholder="Select a category">
+      {categories.find(cat => cat.id === field.value)?.name}
+    </SelectValue>
+  </SelectTrigger>
+  <SelectContent>
+    {categories.map(cat => (
+      <SelectItem key={cat.id} value={cat.id}>
+        {cat.name}
+      </SelectItem>
+    ))}
+  </SelectContent>
+</Select>
+
               </FormControl>
               <FormMessage />
             </FormItem>
